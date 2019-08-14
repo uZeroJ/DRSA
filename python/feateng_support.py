@@ -83,7 +83,7 @@ def build_yzbx_data(raw_train, raw_test, yzbx_train, yzbx_test):
                     feat_name = features[i]
                     feat_val = get_feat_val(feat_name, line_items[i])
                     key = "{}:{}".format(feat_num, feat_val)
-                    if key not in feat_index.keys():
+                    if key not in list(feat_index.keys()):
                         key = "{}:other".format(feat_num)    
                     x_items.append("{}:1".format(feat_index[key]))
                 # get b and z
@@ -129,8 +129,8 @@ def feat_stat(train, test):
     # print result
     for feat in features:
         stats = feat_dict[feat]
-        print("{} result:".format(feat))
-        print("max value:{0}    min value:{1}   distinct cnt:{2}".format(max(stats), min(stats), len(stats)))
+        print(("{} result:".format(feat)))
+        print(("max value:{0}    min value:{1}   distinct cnt:{2}".format(max(stats), min(stats), len(stats))))
 
 
 def main(args):

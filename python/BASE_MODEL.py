@@ -80,8 +80,8 @@ class SparseData():
         self.labels = np.array(self.labels)
         self.seqlen = np.array(self.seqlen)
         self.market_price = np.array(self.market_price)
-        print("data size ", self.size, "\n")
-        self.index = range(0, self.size)
+        print(("data size ", self.size, "\n"))
+        self.index = list(range(0, self.size))
         self.data, self.seqlen, self.labels, self.market_price = self.shuffle()
         self.batch_id = 0
 
@@ -199,7 +199,7 @@ class BASE_RNN():
                 "{:.2f}".format(self.ALPHA) + "_" \
                 "{:.2f}".format(self.BETA) + "_" + str(ADD_TIME_FEATURE) + \
                    "_" + str(self.QRNN_MODEL) + "_" + str(self.COV_SIZE) + "_" + str(DISCOUNT)
-        print para, '\n'
+        print(para, '\n')
         self.filename = para
         self.train_log_txt_filename = "./" + para + '.train.log.txt'
         if os.path.exists(self.train_log_txt_filename):
@@ -338,13 +338,13 @@ class BASE_RNN():
         grads, _ = tf.clip_by_global_norm(tf.gradients(self.cost, tvars),
                                           self.GRAD_CLIP,
                                           )
-        self.train_op = optimizer.apply_gradients(zip(grads, tvars), name="train_op")
+        self.train_op = optimizer.apply_gradients(list(zip(grads, tvars)), name="train_op")
         tf.add_to_collection('train_op', self.train_op)
 
         anlp_grads, _ = tf.clip_by_global_norm(tf.gradients(self.anlp_node, tvars),
                                           self.GRAD_CLIP,
                                           )
-        self.anlp_train_op = optimizer_anlp.apply_gradients(zip(anlp_grads, tvars), name="anlp_train_op")
+        self.anlp_train_op = optimizer_anlp.apply_gradients(list(zip(anlp_grads, tvars)), name="anlp_train_op")
         tf.add_to_collection('anlp_train_op', self.anlp_train_op)
 
 
@@ -353,7 +353,7 @@ class BASE_RNN():
                                           self.GRAD_CLIP,
                                           )
 
-        self.com_train_op = optimizer.apply_gradients(zip(com_grads, tvars), name="train_op")
+        self.com_train_op = optimizer.apply_gradients(list(zip(com_grads, tvars)), name="train_op")
         tf.add_to_collection('com_train_op', self.com_train_op)
 
         correct_pred = tf.equal(tf.argmax(self.predict, 1), tf.argmax(self.tf_y, 1))
@@ -441,11 +441,11 @@ class BASE_RNN():
                     try:
                         mean_auc = roc_auc_score(np.reshape(train_auc_label, [1, -1])[0], np.reshape(train_auc_prob, [1, -1])[0])
                     except Exception:
-                        print "AUC ERROE"
+                        print("AUC ERROE")
                         continue
 
                 log = self.getStatStr("TRAIN", self.global_step, mean_auc, mean_loss, mean_anlp)
-                print log
+                print(log)
                 self.force_write(log)
                 train_loss_arr = []
                 train_anlp_arr = []
@@ -481,7 +481,7 @@ class BASE_RNN():
             self.train_test(sess)
 
     def save_model(self):
-        print "model name: ", self.filename, " ", self.global_step, "\n"
+        print("model name: ", self.filename, " ", self.global_step, "\n")
         self.saver.save(self.sess, "./saved_model/model" + self.filename, global_step=self.global_step)
 
     def getStatStr(self, category ,step, mean_auc, mean_loss, mean_anlp):
@@ -555,7 +555,7 @@ class BASE_RNN():
         mean_loss = np.array(loss_arr).mean()
         mean_anlp = np.array(anlp_arr).mean()
         log = self.getStatStr("TEST_WIN_DATA", self.global_step, 0.000001, mean_loss, mean_anlp)
-        print log
+        print(log)
         for i in range(0, int(self.test_data_lose.size / self.BATCH_SIZE)):
             test_batch_x, test_batch_y, test_batch_len, test_batch_market_price = self.test_data_lose.next(
                 self.BATCH_SIZE)
@@ -575,7 +575,7 @@ class BASE_RNN():
                 auc = roc_auc_score(np.reshape(np.array(auc_label), [1, -1])[0],
                                 np.reshape(np.array(auc_prob), [1, -1])[0])
             except Exception:
-                print "AUC ERROR"
+                print("AUC ERROR")
                 return
 
             auc_arr.append(auc)
@@ -584,7 +584,7 @@ class BASE_RNN():
         mean_anlp = np.array(anlp_arr).mean()
         log = self.getStatStr("TEST", self.global_step, mean_auc, mean_loss, mean_anlp)
         self.force_write(log)
-        print log
+        print(log)
         return mean_loss, mean_auc, mean_anlp
 
     def force_write(self, log):

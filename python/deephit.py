@@ -131,7 +131,7 @@ class DeepHit:
             if step * self.batch_size - epoch * int(0.02 * self.train_data_amt) >= int(0.02 * self.train_data_amt):
                 loss = np.mean(batch_loss[step - int(int(0.02 * self.train_data_amt) / self.batch_size) - 1:])
                 loss_list.append(loss)
-                print("train loss of epoch-{0} is {1}".format(epoch, loss))
+                print(("train loss of epoch-{0} is {1}".format(epoch, loss)))
                 epoch += 1
 
             # stop condition
@@ -179,9 +179,9 @@ class DeepHit:
         AUC = np.mean(auc_batch)
         LOGLOSS = np.mean(logloss_batch)
 
-        print("AUC: {}".format(AUC))
-        print("Log-Loss: {}".format(LOGLOSS))
-        print("ANLP: {}".format(ANLP))
+        print(("AUC: {}".format(AUC)))
+        print(("Log-Loss: {}".format(LOGLOSS)))
+        print(("ANLP: {}".format(ANLP)))
 
         with open(self.output_dir + 'result.txt', 'w') as f:
             f.writelines(["AUC:{}\tANLP:{}\tLog-Loss:{}".format(AUC, ANLP, LOGLOSS)])
@@ -199,7 +199,7 @@ class DeepHit:
             feed_dict[self.z] = z_batch
             feed_dict[self.y] = y_batch
             output = np.vstack([output, self.sess.run(self.w, feed_dict)])
-        print(output.shape)
+        print((output.shape))
         np.savetxt(self.output_dir + 's.txt', 1 - output[self.batch_size:,], delimiter='\t', fmt='%.4f')
 
 

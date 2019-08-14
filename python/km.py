@@ -55,7 +55,7 @@ def train(num,base_path=base_path):
 		b_data[b].append(o)
 		size+=1
 	fi.close()
-	b_data=sorted(b_data.items(),key=lambda e:e[0],reverse=False)
+	b_data=sorted(list(b_data.items()),key=lambda e:e[0],reverse=False)
 	b_data=dict(b_data)
 
 	bdns=[]
@@ -113,7 +113,7 @@ def train2(num,base_path=base_path):
 		b_data[b].append(o)
 		size+=1
 	fi.close()
-	b_data=sorted(b_data.items(),key=lambda e:e[0],reverse=False)
+	b_data=sorted(list(b_data.items()),key=lambda e:e[0],reverse=False)
 	b_data=dict(b_data)
 
 	bdns=[]
@@ -156,7 +156,7 @@ def draw(num,zw_dict,maxb):
 	for i in range(1,maxb+1):
 		b_full_data.append(win_prob(i,zw_dict))
 
-	s=range(1,maxb+1)
+	s=list(range(1,maxb+1))
 	A,=plt.step(s, b_full_data, 'r-',where='post',label=num,linewidth=1.0)
 	font1 = {'family' : 'Times New Roman',
 	'weight' : 'normal',
@@ -221,7 +221,7 @@ def test(num,zw_dict,maxb,base_path=base_path):
 	c_index=roc_auc_score(label,pred)
 	p_z=p_z/count
 	log_loss=log_loss/count
-	print(("test count is {0}").format(count))
+	print((("test count is {0}").format(count)))
 	fi.close()
 	return p_z,log_loss,c_index
 
@@ -258,9 +258,9 @@ if __name__=='__main__':
 		#draw(num,zw_dict,maxb)
 		fi.write(num+'\t'+str(p_z)+'\t'+str(log_loss)+'\t'+str(c_index)+'\n')
 		print('---------------------------------------------------------------------------')
-		print("--------------------------------"+num+"-----------------------------------")
-		print("anlp: {}".format(p_z))
-		print("log loss: {}".format(log_loss))
-		print("c-index: {}".format(c_index))
+		print(("--------------------------------"+num+"-----------------------------------"))
+		print(("anlp: {}".format(p_z)))
+		print(("log loss: {}".format(log_loss)))
+		print(("c-index: {}".format(c_index)))
 		print('---------------------------------------------------------------------------')
 	fi.close()

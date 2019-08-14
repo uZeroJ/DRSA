@@ -17,7 +17,7 @@ BETA = 0.2 # coefficient for anlp
 input_file="2259" #toy dataset
 
 if len(sys.argv) < 2:
-    print "Please input learning rate. ex. 0.0001"
+    print("Please input learning rate. ex. 0.0001")
     sys.exit(0)
 
 LR = float(sys.argv[1])

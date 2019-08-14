@@ -84,7 +84,7 @@ class Model:
         for i in range(train_round):
             self.sess.run(self.train_step1, feed_dict)
             loss = self.sess.run(self.loss_phase1, feed_dict)
-            print("train loss of phase-1, iteration-{0} is {1}".format(i, loss))
+            print(("train loss of phase-1, iteration-{0} is {1}".format(i, loss)))
 
 
     def train_phase2(self):
@@ -113,7 +113,7 @@ class Model:
             if step * self.batch_size - epoch * int(0.02 * self.train_data_amt) >= int(0.02 * self.train_data_amt):
                 loss = np.mean(batch_loss[step - int(int(0.02 * self.train_data_amt) / self.batch_size) - 1:])
                 loss_list.append(loss)
-                print("train loss of phase2 epoch-{0} is {1}".format(epoch, loss))
+                print(("train loss of phase2 epoch-{0} is {1}".format(epoch, loss)))
                 epoch += 1
 
             # stop condition
@@ -146,7 +146,7 @@ class Model:
 
         # calculate MSE
         mse = self.sess.run(self.MSE, feed_dict)
-        print("MSE: {}".format(mse))
+        print(("MSE: {}".format(mse)))
 
         ks = self.pred_mp / self.theta
         ps = tf.pow(self.z, (ks - 1.)) * tf.exp(-self.z / self.theta) / tf.pow(self.theta, ks) / tf.exp(tf.lgamma(ks))
@@ -154,9 +154,9 @@ class Model:
         # calculate AUC and LogLoss
         win_rate = self.sess.run(cs, feed_dict)
         auc = roc_auc_score(y, win_rate)
-        print("AUC: {}".format(auc))
+        print(("AUC: {}".format(auc)))
         logloss = log_loss(y, win_rate)
-        print("Log Loss: {}".format(logloss))
+        print(("Log Loss: {}".format(logloss)))
 
         # calculate ANLP
         logp = -tf.log(tf.clip_by_value(ps, 1e-8, 1.0))
@@ -165,7 +165,7 @@ class Model:
         logp_arr[logp_arr == 0] = 1e-20
 
         anlp = np.mean(logp_arr)
-        print("ANLP: {}".format(anlp))
+        print(("ANLP: {}".format(anlp)))
 
         # save result and params
         fin = open(self.output_dir + 'result.txt', 'w')

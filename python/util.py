@@ -42,7 +42,7 @@ class Util:
             items = line.split(' ')
             input_x.append([int(x) for x in items[1:]])
         fin.close()
-        print("data set size: ", len(input_x))
+        print(("data set size: ", len(input_x)))
 
 
         self.x = []
