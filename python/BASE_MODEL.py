@@ -129,7 +129,8 @@ class BASE_RNN():
     train_data = None
 
     def init_matrix(self, shape):
-        return tf.random_normal(shape, stddev=0.1)
+        # return tf.random_normal(shape, stddev=0.1)
+        return tf.random.normal(shape, stddev=0.1)
 
     def __init__(self, EMB_DIM=32,
                  FEATURE_SIZE=13,
@@ -174,14 +175,17 @@ class BASE_RNN():
         self.FIND_PARAMETER = FIND_PARAMETER
         self.add_time_feature = ADD_TIME_FEATURE
         self.MIDDLE_FEATURE_SIZE = MIDDLE_FEATURE_SIZE
-        tf.reset_default_graph()
+        # tf.reset_default_graph()
+        tf.compat.v1.reset_default_graph()
         self.TRAING_STEPS = TRAING_STEPS
         self.BATCH_SIZE = BATCH_SIZE
         self.STATE_SIZE = STATE_SIZE
         self.EMB_DIM = EMB_DIM
         self.FEATURE_SIZE = FEATURE_SIZE
         self.MAX_DEN = MAX_DEN
-        self.MAX_SEQ_LEN = MAX_SEQ_LEN / self.DISCOUNT + 10
+        # change from 2 to 3 as '/' will get float
+        # self.MAX_SEQ_LEN = MAX_SEQ_LEN / self.DISCOUNT + 10
+        self.MAX_SEQ_LEN = MAX_SEQ_LEN // self.DISCOUNT + 10
         self.LR = LR
         self.GRAD_CLIP = GRAD_CLIP
         self.L2_NORM = L2_NORM
@@ -264,6 +268,7 @@ class BASE_RNN():
                                            tf.nn.relu)  # hidden layer
 
             def add_time(x):
+                # Title has error
                 y = tf.reshape(tf.tile(x, [self.MAX_SEQ_LEN]),
                                [self.MAX_SEQ_LEN, self.MIDDLE_FEATURE_SIZE])
                 t = tf.reshape(tf.range(self.MAX_SEQ_LEN), [self.MAX_SEQ_LEN, 1])
